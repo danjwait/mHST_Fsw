@@ -37,7 +37,12 @@ namespace DIO {
         Fw::On onOff
     )
   {
-    // TODO
+    // Set states
+    this->m_toggleCounter = 0; // reset toggle count on any sucessful on/off command
+    this->m_cycling = Fw::On::ON == onOff;
+    // report state change
+    this->log_ACTIVITY_HI_SetDigitalOutOnOff(onOff);
+    // report command success
     this->cmdResponse_out(opCode, cmdSeq, Fw::CmdResponse::OK);
   }
 

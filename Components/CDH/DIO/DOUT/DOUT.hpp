@@ -44,6 +44,12 @@ namespace DIO {
           Fw::On onOff //!< Sets the ditial out as on or off
       ) override;
 
+      //! Private state variables
+      Fw::On m_state = Fw::On::OFF; //! track digital out state
+      U64 m_transitions = 0; //! number of digital out transitions from FSW boot
+      U32 m_toggleCounter = 0; //! counter for number of ticks the digital out has been "on"
+      bool m_cycling = false; //! Flag: if true then digital out will cycle, else no cycling
+
   };
 
 }
