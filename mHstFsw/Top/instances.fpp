@@ -87,6 +87,11 @@ module mHstFsw {
     stack size Default.STACK_SIZE \
     priority 96
 
+  instance led: DIO.DOUT base id 0x0E00 \
+    queue size Default.QUEUE_SIZE \
+    stack size Default.STACK_SIZE \
+    priority 95
+
   # ----------------------------------------------------------------------
   # Queued component instances
   # ----------------------------------------------------------------------
