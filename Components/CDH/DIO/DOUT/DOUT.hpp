@@ -44,6 +44,14 @@ namespace DIO {
           Fw::On onOff //!< Sets the ditial out as on or off
       ) override;
 
+      //! Handler implementation for run
+      //!
+      //! Port receiving calls from rate group
+      void run_handler(
+          FwIndexType portNum, //!< The port number
+          U32 context //!< The call order
+      ) override;
+
       //! Private state variables
       Fw::On m_state = Fw::On::OFF; //! track digital out state
       U64 m_transitions = 0; //! number of digital out transitions from FSW boot

@@ -46,4 +46,17 @@ namespace DIO {
     this->cmdResponse_out(opCode, cmdSeq, Fw::CmdResponse::OK);
   }
 
+  // ----------------------------------------------------------------------
+  // Handler implementations for user-defined typed input ports
+  // ----------------------------------------------------------------------
+
+  void DOUT ::
+    run_handler(
+        FwIndexType portNum,
+        U32 context
+    )
+  {
+    // TODO
+  }
+
 }

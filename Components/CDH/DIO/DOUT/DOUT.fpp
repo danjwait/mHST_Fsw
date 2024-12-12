@@ -15,9 +15,6 @@ module DIO {
         event SetDigitalOutOnOff($state: Fw.On) \
             severity activity high \ 
             format "Digital out set to {}"
-    
-        @ Digital out state
-        telemetry DIGITAL_OUT_STATE: Fw.On
 
         @ Report digital out interval parameter set
         event SetDigitalOutInterval(interval: U32) \
@@ -28,12 +25,21 @@ module DIO {
         event DigitalOutState(onOff: Fw.On) \
             severity activity low \
             format "Digital out is {}"
-            
-        # @ Example port: receiving calls from the rate group
-        # sync input port run: Svc.Sched
+        
+        @ Telemeter digital out state
+        telemetry DOUT_STATE: Fw.On
 
-        # @ Example parameter
-        # param PARAMETER_NAME: U32
+        @ Telemeter number of cycles of digital out state
+        telemetry DOUT_TRANSITION_COUNT: U64
+
+        @ Parameter digital out cycle interval in rate group ticks
+        param DOUT_INTERVAL_TICKS: U32 default 1
+
+        @ Port receiving calls from rate group
+        async input port run: Svc.Sched
+
+        @ Port sending calls to the GPIO driver 
+        output port gpioSet: Drv.GpioWrite
 
         ###############################################################################
         # Standard AC Ports: Required for Channels, Events, Commands, and Parameters  #
