@@ -40,7 +40,7 @@ module DIO {
 
         @ Port sending calls to the GPIO driver 
         output port gpioSet: Drv.GpioWrite
-
+        
         ###############################################################################
         # Standard AC Ports: Required for Channels, Events, Commands, and Parameters  #
         ###############################################################################

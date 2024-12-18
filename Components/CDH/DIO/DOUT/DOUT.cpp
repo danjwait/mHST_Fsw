@@ -42,6 +42,8 @@ namespace DIO {
     this->m_cycling = Fw::On::ON == onOff;
     // report state change
     this->log_ACTIVITY_HI_SetDigitalOutOnOff(onOff);
+    // telemeter the digital out state (onOff) on channel BlinkingState.
+    this->tlmWrite_DOUT_STATE(onOff);
     // report command success
     this->cmdResponse_out(opCode, cmdSeq, Fw::CmdResponse::OK);
   }
@@ -56,7 +58,42 @@ namespace DIO {
         U32 context
     )
   {
-    // TODO
-  }
+    // Read back the on/off toggle tick parameter value and check
+    Fw::ParamValid isValid = Fw::ParamValid::INVALID;
+    U32 interval = this->paramGet_DOUT_INTERVAL_TICKS(isValid);
+    FW_ASSERT((isValid != Fw::ParamValid::INVALID) && (isValid != Fw::ParamValid::UNINIT),static_cast<FwAssertArgType>(isValid));
 
+    // Only cycle when enabled and within interval
+    if (this->m_cycling && (interval !=0)) {
+      // if within interval
+      if(this->m_toggleCounter == 0) {
+        // toggle to On
+        this->m_state = (this->m_state == Fw::On::ON) ? Fw::On::OFF : Fw::On::ON;
+        this->m_transitions++;
+        // telemeter transition count
+        this->tlmWrite_DOUT_TRANSITION_COUNT(this->m_transitions);
+        // write to GPIO; check port connection first
+        if (this->isConnected_gpioSet_OutputPort(0)) {
+          this->gpioSet_out(0, (Fw::On::ON == this->m_state) ? Fw::Logic::HIGH : Fw::Logic::LOW);
+        } 
+        // report state change
+        this->log_ACTIVITY_LO_DigitalOutState(this->m_state);
+      }
+
+      this->m_toggleCounter = (this->m_toggleCounter +1) % interval;
+    }
+    // not within interval 
+    else {
+      if (this->m_state == Fw::On::ON) {
+        // write to GPIO; check port connection first
+        if (this->isConnected_gpioSet_OutputPort(0)) {
+          this->gpioSet_out(0, Fw::Logic::LOW);
+        }
+
+      this->m_state = Fw::On::OFF;
+      // report state change
+      this->log_ACTIVITY_LO_DigitalOutState(this->m_state);
+      }
+    }
+  }
 }
