@@ -52,6 +52,10 @@ namespace DIO {
           U32 context //!< The call order
       ) override;
 
+      //! Emit parameter updated EVR
+      void parameterUpdated(FwPrmIdType id  //!< The parameter ID
+                            ) override;
+
       //! Private state variables
       Fw::On m_state = Fw::On::OFF; //! track digital out state
       U64 m_transitions = 0; //! number of digital out transitions from FSW boot
