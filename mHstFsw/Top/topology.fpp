@@ -42,6 +42,7 @@ module mHstFsw {
     instance textLogger
     instance systemResources
     instance led
+    instance gpioDriver
 
     # ----------------------------------------------------------------------
     # Pattern graph specifiers
