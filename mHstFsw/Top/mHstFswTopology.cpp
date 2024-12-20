@@ -15,6 +15,9 @@
 // Used for 1Hz synthetic cycling
 #include <Os/Mutex.hpp>
 
+// Logging
+#include <Fw/Logger/Logger.hpp>
+
 // Allows easy reference to objects in FPP/autocoder required namespaces
 using namespace mHstFsw;
 
@@ -129,6 +132,13 @@ void configureTopology() {
     configurationTable.entries[2] = {.depth = 100, .priority = 1};
     // Allocation identifier is 0 as the MallocAllocator discards it
     comQueue.configure(configurationTable, 0, mallocator);
+
+    // CDH configuration
+    Os::File::Status status =
+        gpioDriver.open("/dev/gpiochip4", 13, Drv::LinuxGpioDriver::GpioConfiguration::GPIO_OUTPUT);
+    if (status != Os::File::Status::OP_OK) {
+        Fw::Logger::log("[ERROR] Failed to open GPIO pin\n");
+    }
 }
 
 // Public functions for use in main program are namespaced with deployment name mHstFsw

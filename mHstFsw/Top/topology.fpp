@@ -136,7 +136,11 @@ module mHstFsw {
     }
 
     connections mHstFsw {
-      # Add here connections to user-defined components
+      # CDH
+      # Rate Group 1 output to led run input
+      rateGroup1.RateGroupMemberOut[3] -> led.run
+      # led gpioSet output to gpioDriver gpioWrite input
+      led.gpioSet -> gpioDriver.gpioWrite
     }
 
   }
